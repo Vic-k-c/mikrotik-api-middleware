@@ -1,4 +1,4 @@
-const MikroNode = require('mikronode-ng');
+const MikroNode = require('mikronode');
 
 function connect() {
   return new MikroNode(process.env.MIKROTIK_HOST)
