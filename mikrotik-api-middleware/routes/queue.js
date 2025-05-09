@@ -1,5 +1,5 @@
 const express = require('express');
-const MikroNode = require('@f5eng/mikronode');
+const { connect } = require('@f5eng/mikronode'); // ✅ Correct way to import
 
 const router = express.Router();
 
@@ -11,23 +11,27 @@ router.post('/add', async (req, res) => {
   }
 
   try {
-    const device = new MikroNode(host);
-    const conn = await device.connect(user, pass);
-    const chan = conn.openChannel('queue');
+    const conn = await connect({
+      host,
+      user,
+      password: pass
+    });
 
-    await chan.write('/queue/simple/add', [
-      `=name=${target}`,
-      `=target=${target}`,
-      `=max-limit=${maxLimit}`
-    ]);
+    const chan = await conn.openChannel();
+
+    const result = await chan.write('/queue/simple/add', {
+      target,
+      'max-limit': maxLimit
+    });
 
     await chan.close();
     await conn.close();
 
-    res.json({ message: 'Queue added successfully' });
+    res.json({ message: 'Queue added successfully', result });
+
   } catch (error) {
     console.error('Error adding queue:', error.message);
-    res.status(500).json({ error: 'Failed to add queue' });
+    res.status(500).json({ error: 'Failed to add queue', details: error.message });
   }
 });
 
