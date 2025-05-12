@@ -1,12 +1,18 @@
+
 const express = require('express');
 const router = express.Router();
-const connect = require('../services/mikrotikClient');
 
-router.get('/clients', async (req, res) => {
-  const conn = await connect();
-  const chan = await conn.openChannel();
-  const [data] = await chan.write('/ppp/active/print');
-  res.send(data);
+router.post('/', async (req, res) => {
+  const { host, user, pass, name, password, service } = req.body;
+
+  if (!host || !user || !pass || !name || !password || !service) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  res.status(200).json({
+    message: '✅ Mocked PPPoE client added',
+    input: { host, user, pass, name, password, service }
+  });
 });
 
 module.exports = router;
