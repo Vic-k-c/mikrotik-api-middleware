@@ -1,8 +1,9 @@
 const express = require('express');
-const { connect } = require('@f5eng/mikronode'); // ✅ Import MikroTik connection
+const { connect } = require('@f5eng/mikronode'); // ✅ You missed this line
+
 const router = express.Router();
 
-// ✅ Mock endpoint to simulate Hotspot user creation
+// Add Hotspot user (mocked)
 router.post('/', async (req, res) => {
   const { host, user, pass, username, password } = req.body;
 
@@ -16,7 +17,7 @@ router.post('/', async (req, res) => {
   });
 });
 
-// ✅ Disable Hotspot user
+// Disable Hotspot user
 router.post('/disable', async (req, res) => {
   const { host, user, pass, name } = req.body;
 
@@ -39,7 +40,7 @@ router.post('/disable', async (req, res) => {
   }
 });
 
-// ✅ Remove Hotspot user
+// Remove Hotspot user
 router.post('/remove', async (req, res) => {
   const { host, user, pass, name } = req.body;
 
