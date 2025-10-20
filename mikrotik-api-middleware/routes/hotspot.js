@@ -1,37 +1,35 @@
 const express = require('express');
-const { connect } = require('@f5eng/mikronode');
-
 const router = express.Router();
+const { connectToRouter } = require('../services/mikrotikClient');
+const { getRouterById } = require('./routers'); // dynamically fetch router
 
 /**
  * ➕ Add Hotspot User
  */
-router.post('/', async (req, res) => {
-  const { host, user, pass, username, password } = req.body;
+router.post('/add', async (req, res) => {
+  const { routerId, username, password } = req.body;
 
-  if (!host || !user || !pass || !username || !password) {
+  if (!routerId || !username || !password) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  try {
-    // 1️⃣ Connect to MikroTik router
-    const connection = await connect(host, user, pass);
+  const routerInfo = getRouterById(routerId);
+  if (!routerInfo) return res.status(404).json({ error: 'Router not found' });
 
-    // 2️⃣ Open channel
+  try {
+    const connection = await connectToRouter(routerInfo.host, routerInfo.user, routerInfo.pass);
     const chan = await connection.openChannel();
 
-    // 3️⃣ Execute add command
     await chan.write([
       '/ip/hotspot/user/add',
       `=name=${username}`,
       `=password=${password}`
     ]);
 
-    // 4️⃣ Close connections
     await chan.close();
     await connection.close();
 
-    res.status(200).json({ message: `✅ Hotspot user '${username}' added successfully.` });
+    res.status(200).json({ message: `✅ Hotspot user '${username}' added on '${routerInfo.name}'.` });
 
   } catch (error) {
     console.error('❌ Router connection error:', error);
@@ -43,27 +41,29 @@ router.post('/', async (req, res) => {
  * 🚫 Disable Hotspot User
  */
 router.post('/disable', async (req, res) => {
-  const { host, user, pass, name } = req.body;
+  const { routerId, name } = req.body;
 
-  if (!host || !user || !pass || !name) {
+  if (!routerId || !name) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
+  const routerInfo = getRouterById(routerId);
+  if (!routerInfo) return res.status(404).json({ error: 'Router not found' });
+
   try {
-    const connection = await connect(host, user, pass);
+    const connection = await connectToRouter(routerInfo.host, routerInfo.user, routerInfo.pass);
     const chan = await connection.openChannel();
 
-    // Disable the user by name
     await chan.write([
       '/ip/hotspot/user/set',
       `=disabled=yes`,
-      `=numbers=${name}` // "numbers" can accept name or .id
+      `=numbers=${name}`
     ]);
 
     await chan.close();
     await connection.close();
 
-    res.status(200).json({ message: `✅ Hotspot user '${name}' disabled successfully.` });
+    res.status(200).json({ message: `✅ Hotspot user '${name}' disabled on '${routerInfo.name}'.` });
 
   } catch (error) {
     console.error('❌ Disable error:', error);
@@ -75,14 +75,17 @@ router.post('/disable', async (req, res) => {
  * ❌ Remove Hotspot User
  */
 router.post('/remove', async (req, res) => {
-  const { host, user, pass, name } = req.body;
+  const { routerId, name } = req.body;
 
-  if (!host || !user || !pass || !name) {
+  if (!routerId || !name) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
+  const routerInfo = getRouterById(routerId);
+  if (!routerInfo) return res.status(404).json({ error: 'Router not found' });
+
   try {
-    const connection = await connect(host, user, pass);
+    const connection = await connectToRouter(routerInfo.host, routerInfo.user, routerInfo.pass);
     const chan = await connection.openChannel();
 
     await chan.write([
@@ -93,7 +96,7 @@ router.post('/remove', async (req, res) => {
     await chan.close();
     await connection.close();
 
-    res.status(200).json({ message: `✅ Hotspot user '${name}' removed successfully.` });
+    res.status(200).json({ message: `✅ Hotspot user '${name}' removed from '${routerInfo.name}'.` });
 
   } catch (error) {
     console.error('❌ Remove error:', error);
