@@ -1,30 +1,22 @@
-require('dotenv').config();
+// routes/routers.js
+let routers = [];
+
+function getRouterById(id) {
+  return routers.find(r => r.id === id);
+}
+
+function addRouter(router) {
+  router.id = Date.now();
+  routers.push(router);
+  return router;
+}
+
+// Optional: API endpoint to list routers
 const express = require('express');
-const app = express();
-const port = process.env.PORT || 3000;
+const router = express.Router();
 
-// Middleware
-app.use(express.json());
-
-// Routes
-const hotspotRoutes = require('./routes/hotspot');
-const queueRoutes = require('./routes/queue');
-const pppoeRoutes = require('./routes/pppoe');
-const distributorsRoute = require('./routes/distributors'); 
-const routersRoutes = require('./routes/routers');
-
-app.use('/hotspot', hotspotRoutes);
-app.use('/queue', queueRoutes);
-app.use('/pppoe', pppoeRoutes);
-app.use('/api/distributors', distributorsRoute); 
-app.use('/api/routers', routersRoutes);
-
-// Health check endpoint
-app.get('/', (req, res) => {
-  res.send('✅ MikroTik API Middleware is running');
+router.get('/', (req, res) => {
+  res.json(routers);
 });
 
-// Start server
-app.listen(port, () => {
-  console.log(`🚀 Server running at http://localhost:${port}`);
-});
+router.post('/add', (req,
