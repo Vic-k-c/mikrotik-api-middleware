@@ -2,19 +2,18 @@
   "name": "mikrotik-api-middleware",
   "version": "1.0.0",
   "description": "Node.js Express middleware for MikroTik API with MIT license",
-  "type": "commonjs",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
+  "engines": {
+    "node": "20.x"
+  },
   "author": "Victor Cheruiyot",
   "license": "MIT",
   "dependencies": {
+    "@f5eng/mikronode": "^1.0.3",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "@f5eng/mikronode": "^1.0.3"
-  },
-  "engines": {
-    "node": ">=20 <26"
+    "express": "^4.18.2"
   }
 }
