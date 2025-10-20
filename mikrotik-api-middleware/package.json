@@ -13,5 +13,8 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "@f5eng/mikronode": "^1.0.3"
+  },
+  "engines": {
+    "node": ">=20 <26"
   }
 }
