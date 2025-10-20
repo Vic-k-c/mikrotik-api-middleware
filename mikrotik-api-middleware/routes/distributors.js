@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-//const distributorService = require('../services/distributorService');
+const distributorService = require('../services/distributorService');
 
 // ===========================
 // POST - Create a new distributor
@@ -35,7 +35,7 @@ router.get('/', async (req, res) => {
 });
 
 // ===========================
-GET - Get a distributor by ID (optional)
+//GET - Get a distributor by ID (optional)
 // ===========================
 router.get('/:id', async (req, res) => {
   try {
