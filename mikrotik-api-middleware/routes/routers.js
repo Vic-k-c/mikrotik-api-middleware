@@ -42,7 +42,9 @@ router.get('/', (req, res) => res.json(routers));
  * Helper functions for other routes to use dynamically
  */
 function getRouterById(id) {
-  return routers.find(r => r.id === id);
+  // Ensure id is a number, because Date.now() returns number
+  const numericId = typeof id === 'string' ? parseInt(id, 10) : id;
+  return routers.find(r => r.id === numericId);
 }
 
 function getAllRouters() {
@@ -50,7 +52,7 @@ function getAllRouters() {
 }
 
 module.exports = {
-  router,
-  getRouterById,
+  router,        // For mounting in index.js
+  getRouterById, // For hotspot.js or other routes
   getAllRouters
 };
