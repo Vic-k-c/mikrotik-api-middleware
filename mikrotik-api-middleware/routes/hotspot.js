@@ -30,7 +30,6 @@ router.post('/add', async (req, res) => {
     await connection.close();
 
     res.status(200).json({ message: `✅ Hotspot user '${username}' added on '${routerInfo.name}'.` });
-
   } catch (error) {
     console.error('❌ Router connection error:', error);
     res.status(500).json({ error: 'Router connection failed', details: error.message });
@@ -64,7 +63,6 @@ router.post('/disable', async (req, res) => {
     await connection.close();
 
     res.status(200).json({ message: `✅ Hotspot user '${name}' disabled on '${routerInfo.name}'.` });
-
   } catch (error) {
     console.error('❌ Disable error:', error);
     res.status(500).json({ error: 'Failed to disable user', details: error.message });
@@ -97,7 +95,6 @@ router.post('/remove', async (req, res) => {
     await connection.close();
 
     res.status(200).json({ message: `✅ Hotspot user '${name}' removed from '${routerInfo.name}'.` });
-
   } catch (error) {
     console.error('❌ Remove error:', error);
     res.status(500).json({ error: 'Failed to remove user', details: error.message });
