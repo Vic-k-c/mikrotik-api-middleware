@@ -38,4 +38,19 @@ router.post('/add', (req, res) => {
  */
 router.get('/', (req, res) => res.json(routers));
 
-module.exports = router;
+/**
+ * Helper functions for other routes to use dynamically
+ */
+function getRouterById(id) {
+  return routers.find(r => r.id === id);
+}
+
+function getAllRouters() {
+  return routers;
+}
+
+module.exports = {
+  router,
+  getRouterById,
+  getAllRouters
+};
