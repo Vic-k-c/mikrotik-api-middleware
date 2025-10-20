@@ -35,7 +35,7 @@ router.get('/', async (req, res) => {
 });
 
 // ===========================
-// GET - Get a distributor by ID (optional)
+GET - Get a distributor by ID (optional)
 // ===========================
 router.get('/:id', async (req, res) => {
   try {
