@@ -10,12 +10,12 @@ app.use(express.json());
 const hotspotRoutes = require('./routes/hotspot');
 const queueRoutes = require('./routes/queue');
 const pppoeRoutes = require('./routes/pppoe');
-const routersRoutes = require('./routes/routers');
+const routersModule = require('./routes/routers');
 
 app.use('/hotspot', hotspotRoutes);
 app.use('/queue', queueRoutes);
 app.use('/pppoe', pppoeRoutes);
-app.use('/api/routers', routersRoutes);
+app.use('/api/routers', routersModule.router);
 
 // Health check endpoint
 app.get('/', (req, res) => {
