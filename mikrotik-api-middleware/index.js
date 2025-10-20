@@ -10,13 +10,11 @@ app.use(express.json());
 const hotspotRoutes = require('./routes/hotspot');
 const queueRoutes = require('./routes/queue');
 const pppoeRoutes = require('./routes/pppoe');
-const distributorsRoute = require('./routes/distributors');
 const routersRoutes = require('./routes/routers');
 
 app.use('/hotspot', hotspotRoutes);
 app.use('/queue', queueRoutes);
 app.use('/pppoe', pppoeRoutes);
-app.use('/api/distributors', distributorsRoute);
 app.use('/api/routers', routersRoutes);
 
 // Health check endpoint
@@ -28,3 +26,4 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`🚀 Server running at http://localhost:${port}`);
 });
+
